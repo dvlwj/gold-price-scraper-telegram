@@ -4,18 +4,23 @@
   "description": "just a cron app to scrap / get information about latest gold price and announce it daily via telegram API",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
   },
   "author": "dvlwj",
   "license": "ISC",
   "dependencies": {
     "app-root-path": "^3.1.0",
     "axios": "^1.7.9",
+    "cheerio": "^1.0.0",
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.7",
-    "node-cron": "^3.0.3"
+    "express": "^4.21.2",
+    "node-cron": "^3.0.3",
+    "puppeteer": "^24.2.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"
-  }
+  },
+  "type": "module"
 }
