@@ -1,6 +1,6 @@
-# Indonesia Gold Telegram Announcement
+# Indonesia Gold Price List Scraper and Telegram Announcer
 
-A simple Node.js application that scrapes the latest gold prices and announces it daily via the Telegram API. It runs on a cron job to fetch the gold prices and sends the update to a specified Telegram channel or group.
+I know its a bad name, just doing this for side hobby and personal use to monitoring Indonesia's gold price in my personal telegram channel. Is a simple Node.js application that scrapes the latest gold prices and announces it daily via the Telegram API. It runs on a cron job to fetch the gold prices and sends the update to a specified Telegram channel or group.
 
 ## Features
 - Scrapes the latest gold price from a website.
