@@ -9,6 +9,10 @@ const URL = "https://www.logammulia.com/id/harga-emas-hari-ini";
 
 export const fetchLogamMulia = async (telegramToken, telegramChannelId, isProductionEnvironment) => {
   try {
+    await axios.post(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
+      chat_id: `${telegramChannelId}`,
+      text: `Running task to scraping gold price list from logammulia.com at ${dayjs().format('DD MMMM YYYY HH:mm:ss')}`
+    });
     const browser = await puppeteer.launch({
       executablePath: '/usr/bin/chromium-browser',
       args: [
@@ -23,9 +27,23 @@ export const fetchLogamMulia = async (telegramToken, telegramChannelId, isProduc
     // Scrap website using puppeteer
     await page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36");
 
-    await page.goto(URL, {
-        waitUntil: "networkidle2"
-    });
+    try {
+      await page.goto(URL, {
+          waitUntil: "networkidle2",
+          timeout: 60000
+      });
+      await axios.post(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
+        chat_id: `${telegramChannelId}`,
+        text: `Successfully fetched data from ${URL}. Parsing data now.`
+      });
+    } catch (error) {
+      console.error('An error occurred', error);
+      await axios.post(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
+        chat_id: `${telegramChannelId}`,
+        text: `An error occurred while fetching data from ${URL}. Please check the logs for more information. &#10;<code>Error: ${error}</code>`,
+        parse_mode: 'HTML'
+      });
+    }
 
     const pageContent = await page.content();
     await browser.close();
@@ -65,7 +83,7 @@ export const fetchLogamMulia = async (telegramToken, telegramChannelId, isProduc
         message += `<b>${item.weight}</b> : Rp ${item.price}&#10;`;
       }
     });
-    
+
     const messageToSend = `${title}&#10;&#10;${message}`;
 
 
@@ -76,5 +94,10 @@ export const fetchLogamMulia = async (telegramToken, telegramChannelId, isProduc
     });
   } catch (error) {
     console.error('An error occurred', error);
+    await axios.post(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
+      chat_id: `${telegramChannelId}`,
+      text: `An error occurred while fetching data from ${URL}. Please check the logs for more information. &#10;<code>Error: ${error}</code>`,
+      parse_mode: 'HTML'
+    });
   }
 };
