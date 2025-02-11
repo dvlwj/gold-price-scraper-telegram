@@ -55,13 +55,15 @@ export const fetchLogamMulia = async (telegramToken, telegramChannelId, isProduc
     const $ = load(pageContent);
     $(".table.table-bordered tbody tr").each((_, row) => {
       const columns = $(row).find("td")
-      if (columns.length === 1) {
-        currentCategory = columns.text().trim();
-        goldPrices.push({ title: currentCategory });
+      const isTitleRow = columns.length === 1; // Baris kategori hanya punya 1 kolom
+
+      if (isTitleRow) {
+        currentCategory = columns.text().trim(); // Simpan title kategori
+        goldPrices.push({ title: currentCategory }); // Tambahkan title ke daftar
       } else {
         const weight = $(row).find("td:nth-child(1)").text().trim();
         const price = $(row).find("td:nth-child(2)").text().trim();
-
+    
         if (weight && price) {
           goldPrices.push({ weight, price, category: currentCategory });
         }
@@ -82,6 +84,10 @@ export const fetchLogamMulia = async (telegramToken, telegramChannelId, isProduc
         message += `&#10;<b>${item.title}</b>&#10;`;
         lastCategory = item.title;
       } else {
+        if (lastCategory !== item.category) {
+          message += `&#10;`;
+          lastCategory = item.category;
+        }
         message += `<b>${item.weight}</b> : Rp ${item.price}&#10;`;
       }
     });
