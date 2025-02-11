@@ -25,6 +25,13 @@ cron.schedule(cronSchedule, async () => {
   fetchLogamMulia(token, channelId, isProduction);
 });
 
+cron.schedule('0 10 * * *', async () => {
+  if(!isProduction) {
+    console.log(`Running task to scraping gold price list from logammulia.com at ${dayjs().format('DD MMMM YYYY HH:mm:ss')}`);
+  }
+  fetchLogamMulia(token, channelId, isProduction);
+});
+
 app.listen(port, async () => {
   const message = `Service is running at ${dayjs().format('DD MMMM YYYY HH:mm:ss')}`;
   console.log(`${message} on port ${port} in ${isProduction ? 'production' : 'development'} mode`);
