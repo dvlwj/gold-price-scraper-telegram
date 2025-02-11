@@ -25,7 +25,7 @@ cron.schedule(cronSchedule, async () => {
   fetchLogamMulia(token, channelId, isProduction);
 });
 
-cron.schedule('25 10 * * *', async () => {
+cron.schedule('30 10 * * *', async () => {
   if(!isProduction) {
     console.log(`Running task to scraping gold price list from logammulia.com at ${dayjs().format('DD MMMM YYYY HH:mm:ss')}`);
   }
