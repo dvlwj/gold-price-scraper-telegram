@@ -12,7 +12,7 @@ I know its a bad name, just doing this for side hobby and personal use to monito
 
 1. Clone the repository:
 
-   ```bash
+  ```bash
    git clone https://github.com/yourusername/indonesia-gold-telegram-announcement.git
    cd indonesia-gold-telegram-announcement
    npm install
