@@ -54,16 +54,14 @@ export const fetchLogamMulia = async (telegramToken, telegramChannelId, isProduc
     // parsing base on pageContent
     const $ = load(pageContent);
     $(".table.table-bordered tbody tr").each((_, row) => {
-      const columns = $(row).find("td")
-      const isTitleRow = columns.length === 1; // Baris kategori hanya punya 1 kolom
-
-      if (isTitleRow) {
-        currentCategory = columns.text().trim(); // Simpan title kategori
-        goldPrices.push({ title: currentCategory }); // Tambahkan title ke daftar
+      const thElement = $(row).find("th[colspan]");
+      if (thElement.length > 0) {
+        currentCategory = thElement.text().trim();
+        goldPrices.push({ title: currentCategory });
       } else {
         const weight = $(row).find("td:nth-child(1)").text().trim();
         const price = $(row).find("td:nth-child(2)").text().trim();
-    
+
         if (weight && price) {
           goldPrices.push({ weight, price, category: currentCategory });
         }
@@ -72,12 +70,8 @@ export const fetchLogamMulia = async (telegramToken, telegramChannelId, isProduc
 
     // build message to send to telegram
     const title = `${isProductionEnvironment ? '' : '<b>UJI COBA - HARAP ABAIKAN</b>&#10;&#10;'}Harga Emas Logam Mulia Hari Ini. Hasil scraping dari https://logammulia.com pada ${dayjs().format('DD MMMM YYYY HH:mm:ss')}`;
-    // const message = goldPrices.map((item) => `<b>${item.weight}</b> : Rp ${item.price}`).join("&#10;&#10;");
-    // const messageToSend = `${title}&#10;&#10;${message}`;
     let message = "";
     let lastCategory = "";
-
-    console.log(goldPrices);
 
     goldPrices.forEach((item) => {
       if (item.title) {
