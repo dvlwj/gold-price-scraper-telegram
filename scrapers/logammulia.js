@@ -75,6 +75,8 @@ export const fetchLogamMulia = async (telegramToken, telegramChannelId, isProduc
     let message = "";
     let lastCategory = "";
 
+    console.log(goldPrices);
+
     goldPrices.forEach((item) => {
       if (item.title) {
         message += `&#10;<b>${item.title}</b>&#10;`;
