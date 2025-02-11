@@ -2,14 +2,22 @@
 
 import axios from 'axios';
 import { load } from 'cheerio';
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
 import dayjs from 'dayjs';
 
 const URL = "https://www.logammulia.com/id/harga-emas-hari-ini";
 
 export const fetchLogamMulia = async (telegramToken, telegramChannelId, isProductionEnvironment) => {
   try {
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({
+      executablePath: '/usr/bin/chromium-browser',
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-gpu",
+        "--headless"
+      ]
+    });
     const page = await browser.newPage();
 
     // Scrap website using puppeteer
